@@ -7,6 +7,7 @@ import 'main.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 Map currentuser=new Map();
 class LoginM extends StatelessWidget{
   @override
@@ -147,7 +148,40 @@ class LoginPage extends State<LoginMount>{
                  ),),
                ),
                FlatButton(
-                 onPressed: () {
+                 onPressed: () async{
+                   String username=usernamecont.text.toString();
+                   String password=passwordcont.text.toString();
+                   var httpClient = new HttpClient();
+                   var uri=new Uri.http('10.0.2.2:8080','/login/regist');
+                   var request = await httpClient.postUrl(uri);
+                   Map<String,String> send =new Map();
+                   send["username"]=username;
+                   send["password"]=password;
+                   request.headers.set('content-Type', 'application/json');
+                   request.add(utf8.encode(json.encode(send)));
+                   var response = await request.close();
+                   var responsebody = await response.transform(utf8.decoder).join();
+                   String responedata = responsebody;
+                   if (responedata == "success"){
+                     Fluttertoast.showToast(
+                         msg: "注册成功",
+                         toastLength: Toast.LENGTH_SHORT,
+                         gravity: ToastGravity.CENTER,
+                         timeInSecForIos: 1,
+                         textColor: Colors.black,
+                         fontSize: 16.0
+                     );
+                   }
+                   else{
+                     Fluttertoast.showToast(
+                         msg: "注册失败，请重新注册",
+                         toastLength: Toast.LENGTH_SHORT,
+                         gravity: ToastGravity.CENTER,
+                         timeInSecForIos: 1,
+                         textColor: Colors.black,
+                         fontSize: 16.0
+                     );
+                   }
                  },
                  child: Text("注册",
                    style: TextStyle(

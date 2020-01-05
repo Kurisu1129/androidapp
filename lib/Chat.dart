@@ -4,8 +4,12 @@ import 'Bill.dart';
 import 'MyDetails.dart';
 import 'Message.dart';
 import 'Login.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Chat extends StatefulWidget{
+  final WebSocketChannel channel;
+  Chat({this.channel});
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -15,7 +19,11 @@ class Chat extends StatefulWidget{
 class ChatWindow extends State<Chat>{
   final TextEditingController _textController = new TextEditingController();
   final List<ChatMessage> _messages =<ChatMessage>[];
+
   void _handleSubmitted(String text) {
+    if(_textController.text.isNotEmpty){
+      widget.channel.sink.add(_textController.text);
+    }
     _textController.clear();
     ChatMessage sendmessage = new ChatMessage(message:text);
     setState(() {
@@ -80,7 +88,7 @@ class ChatWindow extends State<Chat>{
       );
   }
 }
-const String _name = "1";
+ String _name = currentuser["username"];
 class ChatMessage extends StatelessWidget{
   ChatMessage({this.message});
   final String message;

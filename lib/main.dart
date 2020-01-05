@@ -10,6 +10,9 @@ import 'GetBill.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 void main(){
 
   runApp(new MaterialApp(home:LoginM()));
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
     return  new MaterialApp(
       home: BottomNavigationWidget(),
         routes: {
-          "/chatwindow":(context)=>Chat(),
+          "/chatwindow":(context)=>Chat(channel:MessagePageWidget.channel),
           "/upload":(context)=>UploadBill(),
           "/get":(context)=>GetBill(),
           "/index":(context)=>MyApp(),
